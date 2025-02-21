@@ -26,7 +26,7 @@ io.on("connection", (socket) => {
     socket.on("new user connected", (data) => {
         socket.data.user = data;
         activeUsers.add(data);
-        console.log(activeUsers);
+        io.emit("new user connected", [...activeUsers]);
     });
 })
 
