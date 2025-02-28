@@ -9,14 +9,17 @@ let username;
 
 const sendUsername = () => {
   username = userInput.value;
-  usernameP.innerHTML = `Username: ${username}`;
-  const newUserP = `
-        <p class="${username}-userlist">${username}</p>
-`;
-  connectedUsers.innerHTML += newUserP;
   sendButton.removeEventListener("click", sendUsername);
+  userInput.value = "";
+  sendButton.addEventListener("click", sendMessage);
   socket.emit("new user connected", username);
 };
+
+const sendMessage = () => {
+  let userMessage = userInput.value;
+  socket.emit("chat", userMessage);
+  userInput.value = "";
+}
 
 sendButton.addEventListener("click", sendUsername);
 
@@ -29,3 +32,7 @@ socket.on("new user connected", (data) => {
     connectedUsers.innerHTML += newUserP;
   });
 });
+
+socket.on("chat", (data) => {
+  chat.innerHTML += `<p>${data}</p>`;
+})
